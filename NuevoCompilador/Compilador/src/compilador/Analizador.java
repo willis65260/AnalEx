@@ -271,13 +271,13 @@ public class Analizador {
     public String sacarEsperado(String cad) {
         String segunda_accion = "";
 
-        // int fila = buscar(filas_separada, la_pila.get(la_pila.size() - 1));
-        // segunda_accion += "[";
-        // for (int i = 0; i < columnas_separada.length - 2; i++) {
-        // if (!gram.get(fila)[i].equals(""))
-        // segunda_accion += " " + columnas_separada[i] + ", ";
-        // }
-        // segunda_accion += "]";
+        int fila = buscar(filas_separada, la_pila.get(la_pila.size() - 1));
+        segunda_accion += "[";
+        for (int i = 0; i < columnas_separada.length - 2; i++) {
+            if (!gram.get(fila)[i].equals(""))
+                segunda_accion += " " + columnas_separada[i] + ", ";
+        }
+        segunda_accion += "]";
         return segunda_accion;
     }
 
@@ -323,9 +323,9 @@ public class Analizador {
         }
     }
 
-    public static void main(String[] args) {
-        Analizador obj = new Analizador();
+    // public static void main(String[] args) {
+    // Analizador obj = new Analizador();
 
-    }
+    // }
 
 }
