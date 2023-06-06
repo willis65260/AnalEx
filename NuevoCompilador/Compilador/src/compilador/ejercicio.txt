@@ -1,0 +1,42 @@
+
+
+
+
+
+
+
+
+programa identificadorson ; 
+funcion identificadorsonf ( char identificadorson , char identificadorson ) : bool if ( identificadorson >= identificadorson ) then retornar true ; 
+else retornar false ; 
+identificadorson = = ; 
+identificadorson = 123 ; 
+repeat identificadorson = identificadorson + 123 ; 
+until idf ( identificadorson , id ) ; 
+endfin
+
+
+programa identificadorson ; 
+funcion identificadorsonf ( char identificadorson , char identificadorson ) : bool if ( identificadorson >= identificadorson ) then retornar true ; 
+else retornar false ; 
+endif endf int identificadorson , identificadorson ; 
+identificadorson = 123 ; identificadorson = 123 ; 
+repeat identificadorson = identificadorson + 123 ; 
+until idf ( identificadorson , id ) ; 
+endfin
+
+
+
+
+
+
+programa identificadorson ; 
+funcion identificadorsonf ( char identificadorson , char identificadorson ) : bool if ( identificadorson >= identificadorson ) then retornar true ; 
+else retornar false ; 
+until idf ( identificadorson , id ) ; 
+endif endf int identificadorson , identificadorson ; 
+identificadorson = 12$3 : ; 
+identificadorson = 123 ; 
+repeat identificadorson = identificadorson + 123 ; 
+until idf ( identificadorson , id ) ; 
+endfin
