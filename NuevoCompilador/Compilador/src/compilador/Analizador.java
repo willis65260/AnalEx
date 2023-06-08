@@ -154,7 +154,7 @@ public class Analizador {
             do {
                 if (la_pila.get(la_pila.size() - 1).equals("$")) {
                     System.out.println("Finalizo correctamente la ejecucion el programa");
-                    System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                    // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                     break;
                 }
                 System.out.println("---------------------------------");
@@ -167,7 +167,7 @@ public class Analizador {
                 for (;;) {
                     palabra = ejer.get(ejer.size() - 1);
                     tablas[0] += "<tr>";
-                    System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                    // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                     System.out.println("---------------------------------");
                     System.out.println("Lexema");
@@ -193,13 +193,13 @@ public class Analizador {
                             numero_linea++;
                         la_pila.remove(la_pila.size() - 1);
                         ejer.remove(ejer.size() - 1);
-                        System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                        // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                         break;
                     } else if (lexema_anal_izar.equals(";") || lexema_anal_izar.equals("until")) {
 
                         la_pila.remove(la_pila.size() - 1);
-                        System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                        // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                         break;
                     }
@@ -223,7 +223,7 @@ public class Analizador {
                     }
                     accion_separado = voltear(accion_separado);
 
-                    System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                    // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                     la_pila.remove(la_pila.size() - 1);
                     if (!accion_separado[0].equals("ç")) {
@@ -242,7 +242,7 @@ public class Analizador {
                 if (la_pila.get(la_pila.size() - 1).equals("$")) {
                     System.out.println("Ya estuvo");
                     System.out.println(repeticiones);
-                    System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                    // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                     break;
                 }
@@ -270,10 +270,31 @@ public class Analizador {
 
     public String sacarEsperado(String cad) {
         String segunda_accion = "";
+        System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        System.out.println(cad);
+        System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        if (cad.equals(""))
+            return "se esperaba nada";
+        int itera = 0;
+        int fila = -1;
+        do {
+            System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            System.out.println(la_pila.get(la_pila.size() - 1));
+            System.out.println(la_pila);
 
-        int fila = buscar(filas_separada, la_pila.get(la_pila.size() - 1));
+            fila = buscar(filas_separada, la_pila.get(la_pila.size() - 1));
+            if (fila == -1)
+                la_pila.remove(la_pila.size() - 1);
+            System.out.println(fila);
+
+            System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            if (itera > 10)
+                break;
+            itera++;
+        } while (fila != -1);
         segunda_accion += "[";
-        for (int i = 0; i < columnas_separada.length - 2; i++) {
+        for (int i = 0; i < columnas_separada.length - 1; i++) {
+            System.out.println(cad);
             if (!gram.get(fila)[i].equals(""))
                 segunda_accion += " " + columnas_separada[i] + ", ";
         }
@@ -323,9 +344,11 @@ public class Analizador {
         }
     }
 
-    // public static void main(String[] args) {
-    // Analizador obj = new Analizador();
+    public static void main(String[] args) {
+        String ejercicio = "programa identificadorson ; funcion identificadorsonf ( char identificadorson , char identificadorson ) : bool if ( identificadorson >= identificadorson ) then retornar true ; else retornar false ; endif endf int identificadorson , identificadorson ; identificadorson = 123 ; identificadorson = 123 ; repeat identificadorson = identificadorson + 123 ; until idf ( identificadorson , id ) ; endfin";
+        Analizador obj = new Analizador(ejercicio);
+        obj.Sintactico();
 
-    // }
+    }
 
 }
