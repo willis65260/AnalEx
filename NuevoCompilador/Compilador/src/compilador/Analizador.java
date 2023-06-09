@@ -14,7 +14,7 @@ public class Analizador {
     ArrayList<String> la_pila;
 
     String[] tablas = new String[2];
-    String tablaLexico = "";
+    // String tablaLexico = "";
     // String tablas[0] = "";
 
     String ejercicio = "programa identificadorson ; funcion identificadorsonf ( char identificadorson , char identificadorson ) : bool if ( identificadorson >= identificadorson ) then retornar true ; else retornar false ; endif endf int identificadorson , identificadorson ; identificadorson = 123 ; identificadorson = 123 ; repeat identificadorson = identificadorson + 123 ; until idf ( identificadorson , id ) ; endfin";
@@ -136,7 +136,7 @@ public class Analizador {
 
             }
         }
-        // System.out.println("---------------------------------");
+        // System.out.println("---------------------------------"); 20-20-22
         tablas[1] += "<tr>";
         tablas[1] += "<td> error lexico ne la linea " + numero_linea + " la palabra \"" + palabra
                 + "\" no es reconocida </td>";
@@ -149,22 +149,36 @@ public class Analizador {
 
     public String[] Sintactico() {
         int repeticiones = 0;
-        try {
 
-            do {
-                if (la_pila.get(la_pila.size() - 1).equals("$")) {
-                    System.out.println("Finalizo correctamente la ejecucion el programa");
-                    // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-                    break;
-                }
-                System.out.println("---------------------------------");
-                System.out.println("Ejercicio");
-                System.out.println("---------------------------------");
-                System.out.println("Ejercicio:   " + ejer);
+        do {
+
+            if (la_pila.get(la_pila.size() - 1).equals("$")) {
+                System.out.println("Finalizo correctamente la ejecucion el programa");
+                // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                break;
+            }
+            System.out.println("---------------------------------");
+            System.out.println("Ejercicio");
+            System.out.println("---------------------------------");
+            System.out.println("Ejercicio:   " + ejer);
+
+            try {
                 lexema_anal_izar = lexico(ejer.get(ejer.size() - 1).trim());
-                if (lexema_anal_izar.equals("error"))
-                    return tablas;
-                for (;;) {
+            } catch (Exception e) {
+                // TODO: handle exception
+                System.out.println(Arrays.toString(tablas));
+                return tablas;
+            }
+
+            if (lexema_anal_izar.equals("error")) {
+                tablas[0] += "<tr>";
+                tablas[0] += "<td> error en la linea " + numero_linea + " la palabra incorrecta es " + lexema_anal_izar
+                        + " </td>";
+                tablas[0] += "<td> se esperaba " + sacarEsperado(la_pila.get(la_pila.size() - 1)) + " </td>";
+                tablas[0] += "</tr>";
+            }
+            for (;;) {
+                try {
                     palabra = ejer.get(ejer.size() - 1);
                     tablas[0] += "<tr>";
                     // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -208,6 +222,7 @@ public class Analizador {
                     int lugar_fila = buscar(filas_separada, la_pila.get(la_pila.size() - 1));
 
                     String accion = gram.get(lugar_fila)[lugar_columna];
+
                     System.out.println("---------------------------------");
                     System.out.println("accion");
                     System.out.println("---------------------------------");
@@ -215,47 +230,64 @@ public class Analizador {
                     tablas[0] += "<td>" + accion + "</td>";
 
                     String[] accion_separado = null;
-                    try {
-                        accion_separado = accion.split(" ");
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                        System.out.println("Algo salio mal");
-                    }
-                    accion_separado = voltear(accion_separado);
+                    System.out.println("Esto es lo que sale de accion: " + (int) accion.charAt(0));
+                    if (!accion.equals(" ")) {
+                        try {
+                            accion_separado = accion.split(" ");
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            System.out.println("Algo salio mal");
+                        }
+                        accion_separado = voltear(accion_separado);
 
-                    // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                        // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-                    la_pila.remove(la_pila.size() - 1);
-                    if (!accion_separado[0].equals("ç")) {
-                        agregar_LaPila(accion_separado);
-                    }
-                    repeticiones++;
-                    if (repeticiones > 200)
+                        la_pila.remove(la_pila.size() - 1);
+                        if (!accion_separado[0].equals("ç")) {
+                            agregar_LaPila(accion_separado);
+                        }
+                        repeticiones++;
+                        if (repeticiones > 200)
+                            break;
+
+                        tablas[0] += "<td>" + palabra + "</td>";
+
+                        tablas[0] += "</tr>";
+                    } else {
+                        tablas[0] += "<tr>";
+                        tablas[0] += "<td> error en la linea " + numero_linea + " la palabra incorrecta es " + palabra
+                                + " </td>";
+                        tablas[0] += "<td> se esperaba " + sacarEsperado(la_pila.get(la_pila.size() - 1)) + " </td>";
+                        tablas[0] += "</tr>";
+                        // la_pila.remove(la_pila.size() - 1);
+                        ejer.remove(ejer.size() - 1);
+
                         break;
+                    }
 
-                    tablas[0] += "<td>" + palabra + "</td>";
-
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    tablas[0] += "<tr>";
+                    tablas[0] += "<td> error en la linea " + numero_linea + " la palabra incorrecta es " + palabra
+                            + " </td>";
+                    tablas[0] += "<td> se esperaba " + sacarEsperado(la_pila.get(la_pila.size() - 1)) + " </td>";
                     tablas[0] += "</tr>";
-
-                }
-
-                if (la_pila.get(la_pila.size() - 1).equals("$")) {
-                    System.out.println("Ya estuvo");
-                    System.out.println(repeticiones);
-                    // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-
+                    // la_pila.remove(la_pila.size() - 1);
+                    ejer.remove(ejer.size() - 1);
                     break;
                 }
-                repeticiones++;
-            } while (repeticiones < 200);
-        } catch (Exception e) {
-            // TODO: handle exception
-            tablas[0] += "<tr>";
-            tablas[0] += "<td> error en la linea " + numero_linea + " la palabra incorrecta es " + palabra
-                    + " </td>";
-            tablas[0] += "<td> se esperaba " + sacarEsperado(la_pila.get(la_pila.size() - 1)) + " </td>";
-            tablas[0] += "</tr>";
-        }
+            }
+
+            if (la_pila.get(la_pila.size() - 1).equals("$")) {
+                System.out.println("Ya estuvo");
+                System.out.println(repeticiones);
+                // System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                break;
+            }
+            repeticiones++;
+
+        } while (repeticiones < 200);
+        System.out.println(Arrays.toString(tablas));
         return tablas;
     }
 
@@ -275,29 +307,52 @@ public class Analizador {
         System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         if (cad.equals(""))
             return "se esperaba nada";
-        int itera = 0;
+        int itera = 1;
         int fila = -1;
         do {
             System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             System.out.println(la_pila.get(la_pila.size() - 1));
             System.out.println(la_pila);
 
-            fila = buscar(filas_separada, la_pila.get(la_pila.size() - 1));
-            if (fila == -1)
-                la_pila.remove(la_pila.size() - 1);
+            fila = buscar(filas_separada, la_pila.get(la_pila.size() - itera));
+            // if (fila == -1)
+            // sig-param
+            // la_pila.remove(la_pila.size() - 1);
             System.out.println(fila);
 
             System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            if (itera > 10)
+            if (itera > 10 || fila != -1)
                 break;
             itera++;
+
         } while (fila != -1);
         segunda_accion += "[";
-        for (int i = 0; i < columnas_separada.length - 1; i++) {
-            System.out.println(cad);
-            if (!gram.get(fila)[i].equals(""))
-                segunda_accion += " " + columnas_separada[i] + ", ";
+        int intento = -1;
+        try {
+            for (int i = 0; i < columnas_separada.length - 1; i++) {
+                if (!gram.get(fila)[i].equals("")) {
+                    intento = i;
+                    System.out.println(columnas_separada[i]);
+                    segunda_accion += " " + columnas_separada[i] + ", ";
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            segunda_accion += "]";
+            if (intento == -1) {
+                segunda_accion = "[ " + la_pila.get(la_pila.size() - 1) + " ]";
+            } else {
+
+                System.out.println("se le agrego " + columnas_separada[intento] + " a la pila");
+                PilaAdd(columnas_separada[intento]);
+                if (segunda_accion.equals("[]"))
+                    segunda_accion = "[cadena vacia]";
+            }
+            return segunda_accion;
         }
+
+        PilaAdd(columnas_separada[intento]);
+
         segunda_accion += "]";
         return segunda_accion;
     }
@@ -344,10 +399,49 @@ public class Analizador {
         }
     }
 
+    public void PilaAdd(String cad) {
+
+        try {
+            int lugar_columna = buscar(columnas_separada, cad);
+            int lugar_fila = buscar(filas_separada, la_pila.get(la_pila.size() - 1));
+
+            String accion = gram.get(lugar_fila)[lugar_columna];
+            String[] accion_separado = null;
+            System.out.println("Esto es lo que sale de accion: " + (int) accion.charAt(0));
+            if (!accion.equals(" ")) {
+                try {
+                    accion_separado = accion.split(" ");
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    System.out.println("Algo salio mal");
+                }
+                accion_separado = voltear(accion_separado);
+                agregar_LaPila(accion_separado);
+            }
+            la_pila.remove(la_pila.size() - 1);
+            // ejer.remove(ejer.size() - 1);
+
+        } catch (Exception e) {
+            // TODO: handle exception
+
+        }
+
+    }
+
     public static void main(String[] args) {
-        String ejercicio = "programa identificadorson ; funcion identificadorsonf ( char identificadorson , char identificadorson ) : bool if ( identificadorson >= identificadorson ) then retornar true ; else retornar false ; endif endf int identificadorson , identificadorson ; identificadorson = 123 ; identificadorson = 123 ; repeat identificadorson = identificadorson + 123 ; until idf ( identificadorson , id ) ; endfin";
-        Analizador obj = new Analizador(ejercicio);
-        obj.Sintactico();
+        // String ejercicio = "programa identificadorson ; funcion identificadorsonf (
+        // char identificadorson , char identificadorson ) : bool if ( identificadorson
+        // >= identificadorson ) then retornar true ; else retornar false ; endif endf
+        // int identificadorson , identificadorson ; identificadorson = 123 ;
+        // identificadorson = 123 ; repeat identificadorson = identificadorson + 123 ;
+        // until idf ( identificadorson , id ) ; endfin";
+
+        for (int i = 0; i < args.length; i++) {
+            String ejercicio = "gagagaggga 12345 000000.00000 25-30-22 hola";
+
+            Analizador obj = new Analizador(ejercicio);
+            obj.Sintactico();
+        }
 
     }
 
